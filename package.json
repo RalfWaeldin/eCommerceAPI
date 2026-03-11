@@ -9,13 +9,9 @@
       "development": "./src/db/index.ts",
       "default": "./dist/db/index.js"
     },
-    "#types": {
-      "development": "./src/types/index.ts",
-      "default": "./dist/types/index.js"
-    },
-    "#models": {
-      "development": "./src/models/index.ts",
-      "default": "./dist/models/index.js"
+    "#config": {
+      "development": "./src/config/index.ts",
+      "default": "./dist/config/index.js"
     },
     "#controllers": {
       "development": "./src/controllers/index.ts",
@@ -25,9 +21,21 @@
       "development": "./src/routes/index.ts",
       "default": "./dist/routes/index.js"
     },
+    "#models": {
+      "development": "./src/models/index.ts",
+      "default": "./dist/models/index.js"
+    },
+    "#types": {
+      "development": "./src/types/index.ts",
+      "default": "./dist/types/index.js"
+    },
     "#middleware": {
       "development": "./src/middleware/index.ts",
       "default": "./dist/middleware/index.js"
+    },
+    "#schemas": {
+      "development": "./src/schemas/index.ts",
+      "default": "./dist/schemas/index.js"
     },
     "#utils": {
       "development": "./src/utils/index.ts",
@@ -45,13 +53,23 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.12",
+    "dotenv": "^17.2.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "connect-mongodb-session": "^5.0.0",
     "express": "^5.2.1",
-    "mongoose": "^9.2.3"
+    "mongoose": "^9.2.3",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.3",
+    "zod": "^4.0.8"
   }
 }

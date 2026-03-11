@@ -24,7 +24,8 @@ export const registerSchema = z
     confirmPassword: z.string(),
     firstName: z.string().min(1).max(50),
     lastName: z.string().min(1).max(50),
-    roles: z.array(z.string()),
+    roles: z.array(z.string()).default(["user"]),
+    active: z.boolean().default(true),
   })
   .refine((data) => data.password === data.confirmPassword, {
     error: "Passwords don't match",
@@ -33,4 +34,13 @@ export const registerSchema = z
 export const loginSchema = z.strictObject({
   email: emailSchema,
   password: basePasswordSchema,
+});
+
+export const rootAuthorizeSchema = z.strictObject({
+  role: z.string().default("root"),
+  roles: z.array(z.string()),
+});
+
+export const rolesSchema = z.strictObject({
+  roles: z.array(z.string()),
 });

@@ -10,9 +10,10 @@ export async function hashPassword(password: string) {
 export function createAccessToken(payload: {
   id: Types.ObjectId;
   roles: string[];
+  active: boolean;
 }) {
   return jwt.sign(
-    { sub: payload.id, roles: payload.roles },
+    { sub: payload.id, roles: payload.roles, active: payload.active },
     ACCESS_JWT_SECRET,
     {
       expiresIn: "15min",

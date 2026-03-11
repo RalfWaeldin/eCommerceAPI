@@ -4,6 +4,7 @@ declare global {
       user?: {
         id: string;
         roles: string[];
+        active: boolean;
       };
     }
   }

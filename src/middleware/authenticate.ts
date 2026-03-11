@@ -19,7 +19,8 @@ const authenticate: RequestHandler = (req, res, next) => {
     const user = {
       id: decoded.sub,
       roles: decoded.roles,
-    } as { id: string; roles: string[] };
+      active: decoded.active,
+    } as { id: string; roles: string[]; active: boolean };
 
     req.user = user;
     writeLogFileEntry(

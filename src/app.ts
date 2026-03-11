@@ -1,6 +1,6 @@
 import "#db";
 import express, { type Request } from "express";
-import { authRoutes } from "#routes";
+import { authRoutes, userRoutes } from "#routes";
 import { errorHandler } from "#middleware";
 import cookieParser from "cookie-parser";
 
@@ -15,7 +15,7 @@ app.use(express.json(), cookieParser());
 // Routes
 /////////////////////////////////////////////////////////////////////////////////////
 app.use("/auth", authRoutes);
-//app.use("/users", userRoutes);
+app.use("/users", userRoutes);
 
 //-----------------------------------------------------------------------------------
 // Default Route
@@ -28,7 +28,9 @@ app.get("/", (req: Request, res) =>
 // unknown route
 //-----------------------------------------------------------------------------------
 app.use("/*splat", (req: Request, res) => {
-  throw new Error(`Route ${req.baseUrl} not defined`, { cause: 404 });
+  throw new Error(`${req.method}: Route ${req.baseUrl} not defined`, {
+    cause: 404,
+  });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////

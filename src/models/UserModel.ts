@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { boolean } from "zod";
 
 const userSchema = new Schema(
   {
@@ -18,6 +19,7 @@ const userSchema = new Schema(
       minlength: [6, "Password must be at least 6 characters long"],
     },
     roles: { type: [String], required: [true, "Roles are required"] },
+    active: { type: boolean },
   },
   {
     timestamps: true,

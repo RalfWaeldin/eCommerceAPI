@@ -19,7 +19,7 @@ function setAuthCookies(res: Response, accessToken: string) {
 
 export const register: RequestHandler = async (req, res) => {
   writeLogFileEntry(`Enter register`, res, 3, "authController: register");
-  const { firstName, lastName, email, password, roles } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   const userExists = await User.exists({ email });
   if (userExists) throw new Error("Email already exists", { cause: 400 });
@@ -31,12 +31,14 @@ export const register: RequestHandler = async (req, res) => {
     password: hashedPassword,
     firstName,
     lastName,
-    roles,
+    roles: ["user"],
+    active: true,
   } satisfies Omit<UserDTO, "confirmPassword">);
 
   const accessToken = createAccessToken({
     id: newUser._id,
     roles: newUser.roles,
+    active: newUser.active as boolean,
   });
 
   setAuthCookies(res, accessToken);
@@ -57,7 +59,13 @@ export const login: RequestHandler = async (req, res) => {
 
   if (!isValid) throw new Error("Incorrect credentials");
 
-  const accessToken = createAccessToken({ id: user._id, roles: user.roles });
+  if (!user.active) throw new Error("User is deactivated");
+
+  const accessToken = createAccessToken({
+    id: user._id,
+    roles: user.roles,
+    active: user.active as boolean,
+  });
 
   setAuthCookies(res, accessToken);
 
@@ -78,7 +86,7 @@ export const me: RequestHandler = async (req, res, next) => {
 
   if (!accessToken)
     throw new Error("Access token is required", { cause: { status: 401 } });
-  writeLogFileEntry(`Token found`, res, 2, "authController: me");
+  writeLogFileEntry(`Token found`, res, 3, "authController: me");
   try {
     const decoded = jwt.verify(accessToken, ACCESS_JWT_SECRET);
 
@@ -86,7 +94,7 @@ export const me: RequestHandler = async (req, res, next) => {
       throw new Error("Invalid or expired access token", {
         cause: { status: 403 },
       });
-    writeLogFileEntry(`Decoded`, res, 2, "authController: me");
+    writeLogFileEntry(`Decoded`, res, 3, "authController: me");
     const user = await User.findById(decoded.sub);
 
     if (!user) throw new Error("User not found", { cause: { status: 404 } });

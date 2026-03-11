@@ -19,6 +19,7 @@
     "rewriteRelativeImportExtensions": true, // Rewrites relative imports with correct extensions
     "module": "preserve", // Preserves ES module syntax (important for native ESM)
     "noEmit": false, // Enables output generation
+    "rootDir": "./src", // Explicitly define the root directory
     "outDir": "dist", // Output directory for compiled JavaScript
     /* Paths */
     "baseUrl": "./src", // Base path for module resolution

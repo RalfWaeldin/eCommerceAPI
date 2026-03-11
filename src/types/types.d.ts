@@ -1,12 +1,23 @@
-import { userSchema, postSchema, signInSchema } from "#schemas";
+//import { registerSchema, loginSchema, rolesSchema, userSchema, postSchema, signInSchema } from "#schemas";
+import {
+  rolesSchema,
+  loginSchema,
+  registerSchema,
+  rootAuthorizeSchema,
+} from "#schemas";
 import { z } from "zod/v4";
 
 declare global {
-  type UserRequestBody = z.infer<typeof userSchema>;
-  type PostRequestBody = z.infer<typeof postSchema>;
-  type SignInRequestBody = z.infer<typeof signInSchema>;
+  type RolesBody = z.infer<typeof rolesSchema>;
+  type LoginRequestBody = z.infer<typeof loginSchema>;
+  type RegisterRequestBody = z.infer<typeof registerSchema>;
+  type RoleRequestBody = z.infer<typeof rootAuthorizeSchema>;
 
-  type SanitizedBody = UserRequestBody | PostRequestBody | SignInRequestBody;
+  type SanitizedBody =
+    | LoginRequestBody
+    | RolesBody
+    | RegisterRequestBody
+    | RoleRequestBody;
 }
 
 export {};

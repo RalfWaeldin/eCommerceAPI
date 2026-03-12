@@ -2,7 +2,7 @@ import { User } from "#models";
 import type { registerSchema } from "#schemas";
 import type { RequestHandler, Response } from "express";
 import { object, z } from "zod/v4";
-import { writeLogFileEntry } from "#utils";
+import { writeLogFileEntry, hashPassword } from "#utils";
 
 type UserDTO = z.infer<typeof registerSchema>;
 
@@ -96,5 +96,71 @@ export const toggleActiveStatus: RequestHandler = async (req, res, next) => {
     "authController: toggleActiveStatus",
   );
   res.json({ message: `User (${id}) active state: ${toggleActive} ` });
+  next;
+};
+
+export const updateUserDetails: RequestHandler = async (req, res, next) => {
+  writeLogFileEntry(
+    `Enter updateUserDetails`,
+    res,
+    3,
+    "authController: updateUserDetails",
+  );
+
+  const {
+    body,
+    params: { id },
+  } = req;
+
+  //const { firstName, lastName, email, password } = req.body;
+
+  const user = await User.findById({ _id: id });
+  if (!user)
+    throw new Error(`User (${id} not found)`, { cause: { status: 404 } });
+
+  const updateduser = await User.updateOne({ _id: id }, body);
+  if (!updateduser)
+    throw new Error(`Update User details (${id}) has failed`, {
+      cause: { status: 400 },
+    });
+  writeLogFileEntry(
+    `User Details for user (${id}) successfully updated'`,
+    res,
+    2,
+    "authController: updateUserDetails",
+  );
+  res.json({ message: `User (${id}) updated` });
+  next;
+};
+
+export const updateUserRoles: RequestHandler = async (req, res, next) => {
+  writeLogFileEntry(
+    `Enter updateUserRoles`,
+    res,
+    3,
+    "authController: updateUserRoles",
+  );
+
+  const {
+    body,
+    params: { id },
+  } = req;
+
+  const user = await User.findById({ _id: id });
+  if (!user)
+    throw new Error(`User (${id} not found)`, { cause: { status: 404 } });
+
+  const updateduser = await User.updateOne({ _id: id }, body);
+  if (!updateduser)
+    throw new Error(`Update Roles details (${id}) has failed`, {
+      cause: { status: 400 },
+    });
+  writeLogFileEntry(
+    `User Roles for user (${id}) successfully updated'`,
+    res,
+    2,
+    "authController: updateUserDetails",
+  );
+  res.json({ message: `User (${id}) updated` });
   next;
 };

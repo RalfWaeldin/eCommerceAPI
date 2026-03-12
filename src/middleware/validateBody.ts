@@ -12,6 +12,7 @@ const validateBody =
       3,
       "middleware: validateBody",
     );
+
     const { data, error, success } = zodSchema.safeParse(req.body);
     if (!success) {
       const joinedmessge = error.issues

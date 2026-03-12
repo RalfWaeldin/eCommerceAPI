@@ -69,8 +69,15 @@ export const login: RequestHandler = async (req, res) => {
 
   setAuthCookies(res, accessToken);
 
-  writeLogFileEntry(`Logged in`, res, 2, "authController: login");
-  res.status(200).json({ message: "Logged in" });
+  writeLogFileEntry(
+    `User "${user.email}" logged in as "${user.roles}"`,
+    res,
+    2,
+    "authController: login",
+  );
+  res
+    .status(200)
+    .json({ message: `User ${user.email} logged in as '${user.roles}'` });
 };
 
 export const logout: RequestHandler = async (req, res) => {

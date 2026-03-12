@@ -1,6 +1,12 @@
 import "#db";
 import express, { type Request } from "express";
-import { authRoutes, userRoutes } from "#routes";
+import {
+  authRoutes,
+  userRoutes,
+  productRoutes,
+  categoryRoutes,
+  orderRoutes,
+} from "#routes";
 import { errorHandler } from "#middleware";
 import cookieParser from "cookie-parser";
 
@@ -16,6 +22,9 @@ app.use(express.json(), cookieParser());
 /////////////////////////////////////////////////////////////////////////////////////
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/category", categoryRoutes);
+app.use("/products", productRoutes);
+app.use("/orders", orderRoutes);
 
 //-----------------------------------------------------------------------------------
 // Default Route

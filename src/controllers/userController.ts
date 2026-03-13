@@ -1,6 +1,6 @@
 import { User } from "#models";
 import type { registerSchema } from "#schemas";
-import type { RequestHandler, Response } from "express";
+import type { RequestHandler, Response, NextFunction } from "express";
 import { object, z } from "zod/v4";
 import { writeLogFileEntry, hashPassword } from "#utils";
 
@@ -66,6 +66,29 @@ export const roleOrderedList: RequestHandler = async (req, res, next) => {
 
   res.json(output);
   next();
+};
+
+export const userById: RequestHandler = async (req, res, next) => {
+  writeLogFileEntry(`Enter userById`, res, 3, "authController: userById");
+
+  const {
+    params: { id },
+  } = req;
+
+  const user = await User.findOne({ _id: id });
+  if (!user)
+    throw new Error(`User with id '${id}' not found`, {
+      cause: { status: 404 },
+    });
+
+  writeLogFileEntry(
+    `User with '${id}' found`,
+    res,
+    2,
+    "authController: userById",
+  );
+
+  res.json(user);
 };
 
 export const toggleActiveStatus: RequestHandler = async (req, res, next) => {

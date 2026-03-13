@@ -76,7 +76,7 @@ const authorizeAdmin: RequestHandler = (req, res, next) => {
       );
     }
     return next(
-      new Error(`No sufficient role! "admin" required`, {
+      new Error(`Authorization Error: Role Admin required' `, {
         cause: { status: 401 },
       }),
     );

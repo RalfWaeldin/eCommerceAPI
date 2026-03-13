@@ -61,6 +61,7 @@ const authorizeRoot: RequestHandler = (req, res, next) => {
       2,
       "middleware: authorizeRoot",
     );
+
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -71,8 +72,8 @@ const authorizeRoot: RequestHandler = (req, res, next) => {
       );
     }
     return next(
-      new Error(`No sufficient role! "root" required`, {
-        cause: { status: 401 },
+      new Error(`Authorization Error: Role Root required' `, {
+        cause: { status: 400 },
       }),
     );
   }

@@ -102,6 +102,7 @@ export const me: RequestHandler = async (req, res, next) => {
         cause: { status: 403 },
       });
     writeLogFileEntry(`Decoded`, res, 3, "authController: me");
+
     const user = await User.findById(decoded.sub);
 
     if (!user) throw new Error("User not found", { cause: { status: 404 } });

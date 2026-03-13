@@ -1,17 +1,19 @@
 import { Router } from "express";
 import {
-  allProducts,
+  storageProducts,
   productsByCategoryName,
   addProduct,
   productById,
+  shopProducts,
 } from "#controllers";
 import { isAuhorizedAsAdmin, validateObjectId } from "#middleware";
 
 const productRouter = Router();
 
-productRouter.get("/", allProducts);
-productRouter.get("/:id", validateObjectId, productById);
-productRouter.get("/byCategory", productsByCategoryName);
+productRouter.get("/availableproducts", shopProducts);
+productRouter.get("/", isAuhorizedAsAdmin, storageProducts);
+productRouter.get("/:id", isAuhorizedAsAdmin, validateObjectId, productById);
+productRouter.get("/byCategory", isAuhorizedAsAdmin, productsByCategoryName);
 productRouter.post("/", isAuhorizedAsAdmin, addProduct);
 
 export default productRouter;

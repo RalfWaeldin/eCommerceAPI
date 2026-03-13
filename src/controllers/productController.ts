@@ -1,8 +1,8 @@
 import type { RequestHandler, Response } from "express";
 import { writeLogFileEntry, hashPassword } from "#utils";
-import { Product, Category } from "#models";
+import { Product, Category, Order } from "#models";
 
-export const allProducts: RequestHandler = async (req, res, next) => {
+export const storageProducts: RequestHandler = async (req, res, next) => {
   writeLogFileEntry(
     `Enter allProducts`,
     res,
@@ -21,13 +21,63 @@ export const allProducts: RequestHandler = async (req, res, next) => {
     res.json(products);
   } else {
     writeLogFileEntry(
-      `No allProducts found`,
+      `No Products found`,
       res,
       2,
       "productController: allProducts",
     );
     res.json({ message: `No products found` });
   }
+  next();
+};
+
+export const shopProducts: RequestHandler = async (req, res, next) => {
+  writeLogFileEntry(
+    `Enter storeProducts`,
+    res,
+    3,
+    "productController: storeProducts",
+  );
+
+  //Hohle alle Produkte (Lager)
+  const products = await Product.find();
+  if (products.length <= 0) res.json({ message: `No Products available` });
+  writeLogFileEntry(
+    `${products.length} registered Products found`,
+    res,
+    3,
+    "productController: storeProducts",
+  );
+
+  // Hohle alle Bestellungen
+  const orders = await Order.find();
+  if (orders.length <= 0) res.json({ message: `No orders available` });
+  writeLogFileEntry(
+    `${orders.length} Orders found`,
+    res,
+    3,
+    "productController: storeProducts",
+  );
+
+  // Für jedes Produkt
+  products.forEach((product) => {
+    // Für jede Bestellung
+    orders.forEach((order) => {
+      // Suche nach Bestellungen für das Produkt
+      const matches = order.orders.filter((orderitem) => {
+        const isEqual =
+          orderitem.product_id.toString() == product._id.toString();
+        return isEqual;
+      });
+      // Subtrahiere jede Bestellung für das Produkt vom Lagerbestand ab
+      matches.forEach((match) => {
+        if (match) {
+          product.count = product.count - match.ordered;
+        }
+      });
+    });
+  });
+  res.json(products);
   next();
 };
 

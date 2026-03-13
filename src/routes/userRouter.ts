@@ -13,6 +13,7 @@ import {
   toggleActiveStatus,
   updateUserDetails,
   updateUserRoles,
+  userById,
 } from "#controllers";
 
 const userRouter = Router();
@@ -23,6 +24,14 @@ userRouter.get(
   isAuhorizedAsRoot,
   validateBody(rolesSchema),
   roleOrderedList,
+);
+
+userRouter.get(
+  "/:id",
+  isAuthenticated,
+  isAuhorizedAsRoot,
+  validateObjectId,
+  userById,
 );
 
 userRouter.patch(
@@ -36,6 +45,7 @@ userRouter.patch(
 userRouter.patch(
   "/userDetails/:id",
   isAuthenticated,
+  isAuhorizedAsAdmin,
   validateObjectId,
   validateBody(userUpdateSchema),
   validateUniqueUserEmail,

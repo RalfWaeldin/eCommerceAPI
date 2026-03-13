@@ -71,7 +71,7 @@ const authorizeUser: RequestHandler = (req, res, next) => {
       );
     }
     return next(
-      new Error(`No sufficient role! "user" required`, {
+      new Error(`Authorization Error: Role User required' `, {
         cause: { status: 401 },
       }),
     );

@@ -5,6 +5,7 @@ import {
   registerSchema,
   rootAuthorizeSchema,
   orderCreateSchema,
+  productCreateSchema,
 } from "#schemas";
 import { z } from "zod/v4";
 
@@ -14,13 +15,15 @@ declare global {
   type RegisterRequestBody = z.infer<typeof registerSchema>;
   type RoleRequestBody = z.infer<typeof rootAuthorizeSchema>;
   type OrderRequestBody = z.infer<typeof orderCreateSchema>;
+  type ProductCreateBody = z.infer<typeof productCreateSchema>;
 
   type SanitizedBody =
     | LoginRequestBody
     | RolesBody
     | RegisterRequestBody
     | RoleRequestBody
-    | OrderRequestBody;
+    | OrderRequestBody
+    | ProductCreateBody;
 }
 
 export {};
